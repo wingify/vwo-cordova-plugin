@@ -1,0 +1,12 @@
+{
+  "name": "vwo-cordova-plugin",
+  "version": "1.0.0",
+  "cordova": {
+    "id": "vwo-cordova-plugin",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "description": "VWO Cordova Plugin"
+}

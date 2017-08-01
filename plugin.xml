@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="vwo-cordova-plugin"
+    version="1.0.0">
+    <name>VWO Cordova Plugin</name>
+    <description> </description>
+    <license>MIT</license>
+    <keywords> </keywords>
+    <repo> </repo>
+    <issue> </issue>
+
+    <!-- android -->
+    <platform name="android">
+        <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
+        <js-module src="www/plugin.js" name="plugin">
+        <runs/>
+        <clobbers target="VWOCordovaPlugin" />
+      </js-module>
+      <config-file target="res/xml/config.xml" parent="/*">
+        <feature name="VWOCordovaPlugin">
+          <param name="android-package" value="android.VWOCordovaPlugin" />
+          <param name="onload" value="true" />
+        </feature>
+      </config-file>
+
+      <source-file src="src/android/VWOCordovaPlugin.java" target-dir="src/" />
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+        <framework src="VWO" type="podspec" spec="~> 2.0.0-beta1" />
+        <js-module src="www/plugin.js" name="plugin">
+            <runs/>
+            <clobbers target="VWOCordovaPlugin" />
+        </js-module>
+        <config-file target="config.xml" parent="/*">
+            <feature name="VWOCordovaPlugin">
+                <param name="ios-package" value="VWOCordovaPlugin" onload="true" />
+            </feature>
+        </config-file>
+
+        <header-file src="src/ios/VWOCordovaPlugin.h" />
+        <source-file src="src/ios/VWOCordovaPlugin.m" />
+    </platform>
+</plugin>
