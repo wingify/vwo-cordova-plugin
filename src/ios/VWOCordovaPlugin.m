@@ -5,8 +5,7 @@
 
 @implementation VWOCordovaPlugin
 
-- (void)pluginInitialize {
-}
+- (void)pluginInitialize {}
 
 - (void)launchSynchronously:(CDVInvokedUrlCommand *)command {
   NSString* callbackId = [command callbackId];
@@ -15,8 +14,8 @@
   CDVPluginResult* result;
   if(apiKey != nil){
     result = [CDVPluginResult
-                              resultWithStatus:CDVCommandStatus_OK
-                              messageAsString:@"VWO initialized"];
+                            resultWithStatus:CDVCommandStatus_OK
+                            messageAsString:@"VWO Initialized"];
     [VWO launchSynchronouslyForAPIKey:apiKey];
   }else{
     result = [CDVPluginResult
@@ -146,7 +145,6 @@
   }
 
   [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-
 }
 
 - (void)version: (CDVInvokedUrlCommand *)command{
