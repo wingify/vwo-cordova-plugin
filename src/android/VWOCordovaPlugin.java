@@ -19,7 +19,6 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import android.widget.Toast;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +73,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
       return true;
 
     } else if (action.equals("getVariationForKey")) {
-     Toast.makeText(cordova.getActivity(), "key: "+args.getString(0), Toast.LENGTH_SHORT).show();
 
       String key = args.getString(0);
       
@@ -83,7 +81,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
       return true;
 
     } else if (action.equals("getVariationForKeyWithValue")) {
-     Toast.makeText(cordova.getActivity(), "key: "+args.getString(0), Toast.LENGTH_SHORT).show();
 
       String key = args.getString(0);
       if (args.length()>1 && args.getJSONObject(1) != JSONObject.NULL) {
@@ -96,8 +93,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
 
     }else if (action.equals("markConversionForGoal")) {
 
-      Toast.makeText(cordova.getActivity(), "goal: "+args.getString(0), Toast.LENGTH_SHORT).show();
-
       String goalIdentifier = args.getString(0);
       markConversionForGoal(goalIdentifier, callbackContext);
       return true;
@@ -108,7 +103,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
       double value = Double.parseDouble(args.getString(1));
       markConversionForGoalWithValue(goalIdentifier, value, callbackContext);
       return true;
-
     }
 
     return false;
@@ -136,11 +130,10 @@ public class VWOCordovaPlugin extends CordovaPlugin {
     cordova.getActivity().runOnUiThread(new Runnable() {
       public void run() {
         JSONObject object = (JSONObject) VWO.getVariationForKey(key);
-             Toast.makeText(cordova.getActivity(), "variation: "+object, Toast.LENGTH_SHORT).show();
-             if(object!=null){
-        callbackContext.success(object);
-      }
-      }
+          if(object!=null){
+            callbackContext.success(object);
+          }
+        }
     });
   }
 
@@ -244,15 +237,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
       String key = keysItr.next();
       String value = (String) object.get(key);
 
-    /*
-      if(value instanceof JSONArray) {
-        value = toList((JSONArray) value);
-      }
-
-      else if(value instanceof JSONObject) {
-        value = toMap((JSONObject) value);
-      }
-      */
       map.put(key, value);
     }
     return map;
@@ -262,15 +246,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
     List<String> list = new ArrayList<String>();
     for(int i = 0; i < array.length(); i++) {
       String value = (String) array.get(i);
-      /*
-      if(value instanceof JSONArray) {
-        value = toList((JSONArray) value);
-      }
-
-      else if(value instanceof JSONObject) {
-        value = toMap((JSONObject) value);
-      }
-      */
       list.add(value);
     }
     return list;
