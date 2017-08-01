@@ -2,13 +2,10 @@
  */
 package android;
 
-import android.util.Log;
-
 import com.vwo.mobile.VWO;
 import com.vwo.mobile.VWOConfig;
 import com.vwo.mobile.events.VWOStatusListener;
 import com.vwo.mobile.utils.VWOLog;
-
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -16,7 +13,6 @@ import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,13 +26,11 @@ public class VWOCordovaPlugin extends CordovaPlugin {
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     super.initialize(cordova, webView);
     VWOLog.setLogLevel(VWOLog.ALL);
-
-
-    Log.d(TAG, "Initializing VWOCordovaPlugin");
   }
 
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if (action.equals("launchSynchronously")) {
+
       String apiKey = args.getString(0);
       launchSynchronously(apiKey, callbackContext);
       return true;
@@ -75,9 +69,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
     } else if (action.equals("getVariationForKey")) {
 
       String key = args.getString(0);
-      
       getVariation(key, callbackContext);
-      
       return true;
 
     } else if (action.equals("getVariationForKeyWithValue")) {
@@ -103,8 +95,8 @@ public class VWOCordovaPlugin extends CordovaPlugin {
       double value = Double.parseDouble(args.getString(1));
       markConversionForGoalWithValue(goalIdentifier, value, callbackContext);
       return true;
-    }
 
+    }
     return false;
   }
 
@@ -203,6 +195,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
       .setCustomSegmentationMapping(map)
       .build();
   }
+  
   private HashMap<String, String> jsonToMap(JSONObject json) throws JSONException {
     HashMap<String, String> retMap = new HashMap<String, String>();
 
@@ -231,7 +224,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
 
   private HashMap<String, String> toMap(JSONObject object) throws JSONException {
     HashMap<String, String> map = new HashMap<String, String>();
-
     Iterator<String> keysItr = object.keys();
     while(keysItr.hasNext()) {
       String key = keysItr.next();
