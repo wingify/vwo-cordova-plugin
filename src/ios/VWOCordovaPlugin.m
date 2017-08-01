@@ -60,8 +60,6 @@
                             resultWithStatus:CDVCommandStatus_ERROR];
     [self.commandDelegate sendPluginResult:result callbackId:callbackId];
   }
-
-  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
 - (void)getVariationForKey: (CDVInvokedUrlCommand *)command {
