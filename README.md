@@ -4,8 +4,8 @@ Cordova Plugin for the Android SDK and VWO iOS
 
 A/B Testing Plugin for platforms such as Ionic, Phonegap, Crosswalk, Intel XDK 
 
-#### [Android SDK](http://developers.vwo.com/reference#ios-introduction)
-#### [iOS SDK](http://developers.vwo.com/reference#android-introduction)
+#### [iOS SDK](http://developers.vwo.com/reference#ios-introduction)
+#### [Android SDK](http://developers.vwo.com/reference#android-introduction)
 
 ## Installation
 
