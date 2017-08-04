@@ -7,23 +7,23 @@ A/B Testing Plugin for platforms such as Ionic, Phonegap, Crosswalk, Intel XDK
 #### [iOS SDK](http://developers.vwo.com/reference#ios-introduction)
 #### [Android SDK](http://developers.vwo.com/reference#android-introduction)
 
-## Installation
+# Installation
 
 ### Edge
 
 `cordova plugin add https://github.com/wingify/vwo-cordova-plugin`
 
-## Uninstall plugin
+# Uninstall plugin
 
 `cordova plugin remove vwo-cordova-plugin`
 
-## Setting up VWO Account
+# Setting up VWO Account
 
 Sign Up for VWO account at https://vwo.com
 
-## Getting Started Documentation
+# Getting Started Documentation
 
-Coming soon!
+http://developers.vwo.com/reference#cordova-plugin
 
 ## Author
 
