@@ -5,27 +5,33 @@ package android;
 import com.vwo.mobile.VWO;
 import com.vwo.mobile.VWOConfig;
 import com.vwo.mobile.events.VWOStatusListener;
+import com.vwo.mobile.listeners.ActivityLifecycleListener;
 import com.vwo.mobile.utils.VWOLog;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class VWOCordovaPlugin extends CordovaPlugin {
 
   private static final String TAG = VWOCordovaPlugin.class.getSimpleName();
+  private VWOConfig mConfig;
+  private ActivityLifecycleListener listener;
 
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     super.initialize(cordova, webView);
     VWOLog.setLogLevel(VWOLog.ALL);
+    listener = new ActivityLifecycleListener();
+    mConfig = new VWOConfig.Builder().setLifecycleListener(listener).build();
   }
 
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -150,7 +156,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
   private void launchSynchronously(final String apiKey, final CallbackContext callbackContext) {
     cordova.getActivity().runOnUiThread(new Runnable() {
       public void run() {
-        VWO.with(cordova.getActivity(), apiKey).launchSynchronously();
+        VWO.with(cordova.getActivity(), apiKey).config(mConfig).launchSynchronously();
         callbackContext.success("VWO Initialized");
       }
     });
@@ -168,7 +174,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
     cordova.getActivity().runOnUiThread(new Runnable() {
       public void run() {
 
-        VWO.with(cordova.getActivity(), apiKey).launch();
+        VWO.with(cordova.getActivity(), apiKey).config(mConfig).launch();
 
         callbackContext.success("VWO Initialized");
       }
@@ -192,10 +198,11 @@ public class VWOCordovaPlugin extends CordovaPlugin {
   private VWOConfig getVWOConfig(HashMap<String, String> map) {
     return new VWOConfig
       .Builder()
+            .setLifecycleListener(new ActivityLifecycleListener())
       .setCustomSegmentationMapping(map)
       .build();
   }
-  
+
   private HashMap<String, String> jsonToMap(JSONObject json) throws JSONException {
     HashMap<String, String> retMap = new HashMap<String, String>();
 
@@ -209,7 +216,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
 
     cordova.getActivity().runOnUiThread(new Runnable() {
       public void run() {
-        VWO.with(cordova.getActivity(), apiKey).launch(new VWOStatusListener() {
+        VWO.with(cordova.getActivity(), apiKey).config(mConfig).launch(new VWOStatusListener() {
             @Override public void onVWOLoaded() {
               callbackContext.success("VWO Loaded");
             }
@@ -220,6 +227,26 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         });      
       }
     });
+  }
+
+  @Override public void onPause(boolean multitasking) {
+    listener.onPause();
+    super.onPause(multitasking);
+  }
+
+  @Override public void onResume(boolean multitasking) {
+    super.onResume(multitasking);
+    listener.onResume();
+  }
+
+  @Override public void onStop() {
+    listener.onStop();
+    super.onStop();
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    listener.onStart();
   }
 
   private HashMap<String, String> toMap(JSONObject object) throws JSONException {
