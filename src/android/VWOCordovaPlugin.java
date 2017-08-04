@@ -210,11 +210,11 @@ public class VWOCordovaPlugin extends CordovaPlugin {
     cordova.getActivity().runOnUiThread(new Runnable() {
       public void run() {
         VWO.with(cordova.getActivity(), apiKey).launch(new VWOStatusListener() {
-            @Override public void onVwoLoaded() {
+            @Override public void onVWOLoaded() {
               callbackContext.success("VWO Loaded");
             }
 
-            @Override public void onVwoLoadFailure() {
+            @Override public void onVWOLoadFailure() {
               callbackContext.error("VWO Load Failure");
             }
         });      

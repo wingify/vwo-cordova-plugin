@@ -1,7 +1,7 @@
 repositories {
   jcenter()
   maven {
-    url 'https://raw.githubusercontent.com/wingify/vwo-mobile-android/master/'
+      url 'https://raw.githubusercontent.com/wingify/vwo-mobile-android/cordova/'
   }
 }
 
