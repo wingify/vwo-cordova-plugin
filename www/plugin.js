@@ -82,9 +82,8 @@ VWO.variationForKey = function (success, key) {
     throw new Error('Must pass Key for Campaign');
   }
   exec( function(wrappedData) {
-      success(wrappedData[key])
-    }, function() {}, PLUGIN_NAME, 'variationForKey', [key]);
-  }
+    success(wrappedData[key])
+  }, function() {}, PLUGIN_NAME, 'variationForKey', [key]);
 };
 
 /** Get the Variation object for a key. Default value in case key is not found or null.
