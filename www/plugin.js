@@ -19,7 +19,7 @@ VWO.logLevelOff     = 5
  * @param error {callback} Failure Callback
  * @param level {number} Log level
  */
-VWO.setLogLevel: function(level){
+VWO.setLogLevel = function(level){
   if (typeof level !== 'number') {
     throw new Error('Invalid log level');
   }
@@ -33,7 +33,7 @@ VWO.setLogLevel: function(level){
  * @param apiKey {string} The App Key generated in VWO's console
  * @param timeout {number} Connection Timeout of API
  */
-VWO.launchSynchronously: function(apiKey, timeout){
+VWO.launchSynchronously = function(apiKey, timeout){
   if (typeof timeout !== 'number') {
     throw new Error('timeout must be a number');
   }
@@ -49,7 +49,7 @@ VWO.launchSynchronously: function(apiKey, timeout){
  * @param error {callback} Failure Callback
  * @param apiKey {string} The App Key generated in VWO's console
  */
-VWO.launch: function(apiKey){
+VWO.launch = function(apiKey){
   if(!apiKey && typeof level !== 'string') {
     throw new Error('Invalid API Key');
   }
@@ -62,7 +62,7 @@ VWO.launch: function(apiKey){
  * @param failureCallback {callback} Failure Callback
  * @param apiKey {string} The App Key generated in VWO's console
  */
-VWO.launchWithCallback: function(success, error, apiKey){
+VWO.launchWithCallback = function(success, error, apiKey){
   if(!apiKey) {
     throw new Error('Must pass in a API Key');
   }
@@ -77,7 +77,7 @@ VWO.launchWithCallback: function(success, error, apiKey){
  *
  * @return Variation object
  */
-VWO.variationForKey: function (success, key) {
+VWO.variationForKey = function (success, key) {
   if (!key) {
     throw new Error('Must pass Key for Campaign');
   }
@@ -92,7 +92,7 @@ VWO.variationForKey: function (success, key) {
  * @param defaultValue {value} Default Valye
  * @return Variation object
  */
-VWO.variationForKeyWithDefaultValue: function(success, key, defaultValue){
+VWO.variationForKeyWithDefaultValue = function(success, key, defaultValue){
   var value = variationForKey(function(data) {
       if (!data) {
       success(defaultValue);
@@ -109,7 +109,7 @@ VWO.variationForKeyWithDefaultValue: function(success, key, defaultValue){
  * @param error {callback} Failure Callback
  * @param goal {string} Goal's name
  */
-VWO.markConversionForGoal:function (goal) {
+VWO.markConversionForGoal =function (goal) {
   if (!goal) {
     throw new Error('Must pass Goal name');
   }
@@ -123,7 +123,7 @@ VWO.markConversionForGoal:function (goal) {
  * @param goal {string} Goal's name
  * @param value {double} Goal's value
  */
-VWO.markConversionForGoalWithValue:function (goal, value) {
+VWO.markConversionForGoalWithValue =function (goal, value) {
   if (typeof value !== 'number') {
     throw new Error('Value must be a number');
   }
@@ -140,7 +140,7 @@ VWO.markConversionForGoalWithValue:function (goal, value) {
  * @param key {string} Key
  * @param value {string} Value
  */
-VWO.setCustomVariable: function(key, value){
+VWO.setCustomVariable = function(key, value){
   if(!key || !value) {
     throw new Error('Key or Value is null');
   }
@@ -152,7 +152,7 @@ VWO.setCustomVariable: function(key, value){
  * @param success {callback} Success Callback
  * @param error {callback} Failure Callback
  */
-VWO.version: function(success) {
+VWO.version = function(success) {
   exec(success, function() {}, PLUGIN_NAME, 'version', []);
 };
 
