@@ -138,7 +138,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 VWO.markConversionForGoal(goalIdentifier);
-                callbackContext.success("Conversion marked");
             }
         });
     }
@@ -147,7 +146,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 VWO.markConversionForGoal(goalIdentifier, value);
-                callbackContext.success("Conversion marked");
             }
         });
     }
@@ -164,7 +162,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
                         callbackContext.success(wrapperObject);
                     } catch (JSONException exception) {
                         VWOLog.e(VWOLog.DATA, exception, false, false);
-                        callbackContext.error(exception.getMessage());
                     }
                 } else {
                     try {
@@ -172,7 +169,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
                         callbackContext.success(wrapperObject);
                     } catch (JSONException exception) {
                         VWOLog.e(VWOLog.DATA, exception, false, false);
-                        callbackContext.error(exception.getMessage());
                     }
                 }
             }
@@ -183,7 +179,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 VWO.setCustomVariable(key, value);
-                callbackContext.success("Custom Variable Set");
             }
         });
     }
