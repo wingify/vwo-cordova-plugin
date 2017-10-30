@@ -22,23 +22,20 @@
     NSString* apiKey = [command argumentAtIndex:0];
     double timeout = [[command argumentAtIndex:1] doubleValue];
     [VWO launchSynchronouslyForAPIKey:apiKey timeout:timeout];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"VWO Initialized"];
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
 - (void)launch:(CDVInvokedUrlCommand *)command {
     NSString* apiKey = [command argumentAtIndex:0];
     [VWO launchForAPIKey:apiKey];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"VWO Initialized"];
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
 - (void)launchWithCallback:(CDVInvokedUrlCommand *)command {
     NSString* apiKey = [command argumentAtIndex:0];
 
     [VWO launchForAPIKey:apiKey completion:^{
-        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"VWO Initialized"];
-        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
     } failure:^(NSString * _Nonnull error) {
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error"];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -48,9 +45,13 @@
 - (void)variationForKey:(CDVInvokedUrlCommand *)command {
     NSString *key = [command argumentAtIndex:0];
     id variation = [VWO variationForKey:key];
-    NSDictionary *resultDictionary = @{ @"variableKey": key, @"variableValue": variation };
 
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDictionary];
+    CDVPluginResult* result;
+    if (variation == nil) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{key : [NSNull null]}];
+    } else {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{key : variation}];
+    }
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
