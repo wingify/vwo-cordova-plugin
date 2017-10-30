@@ -82,7 +82,7 @@ VWO.variationForKey = function (success, key) {
     throw new Error('Must pass Key for Campaign');
   }
   exec( function(wrappedData) {
-    success(wrappedData[key])
+    success(wrappedData[key]);
   }, function(error) {}, PLUGIN_NAME, 'variationForKey', [key]);
 };
 
@@ -95,12 +95,11 @@ VWO.variationForKey = function (success, key) {
  * @return Variation object
  */
 VWO.variationForKeyWithDefaultValue = function(success, key, defaultValue){
-  var value = variationForKey(function(data) {
+  var value = VWO.variationForKey(function(data) {
       if (!data) {
       success(defaultValue);
     } else {
       success(data);
-      console.log("variationForKeyWithDefaultValue Success");
     }
   }, key);
 };
