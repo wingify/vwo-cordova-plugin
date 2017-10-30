@@ -62,7 +62,7 @@ VWO.launch = function(apiKey){
  * @param failureCallback {callback} Failure Callback
  * @param apiKey {string} The App Key generated in VWO's console
  */
-VWO.launchWithCallback = function(success, error, apiKey){
+VWO.launchWithCallback = function(apiKey, success, error){
   if(!apiKey) {
     throw new Error('Must pass in a API Key');
   }
@@ -77,7 +77,7 @@ VWO.launchWithCallback = function(success, error, apiKey){
  *
  * @return Variation object
  */
-VWO.variationForKey = function (success, key) {
+VWO.variationForKey = function (key, success) {
   if (!key) {
     throw new Error('Must pass Key for Campaign');
   }
@@ -94,7 +94,7 @@ VWO.variationForKey = function (success, key) {
  * @param defaultValue {value} Default Valye
  * @return Variation object
  */
-VWO.variationForKeyWithDefaultValue = function(success, key, defaultValue){
+VWO.variationForKeyWithDefaultValue = function(key, defaultValue, success){
   var value = VWO.variationForKey(function(data) {
       if (!data) {
       success(defaultValue);
@@ -110,7 +110,7 @@ VWO.variationForKeyWithDefaultValue = function(success, key, defaultValue){
  * @param error {callback} Failure Callback
  * @param goal {string} Goal's name
  */
-VWO.markConversionForGoal =function (goal) {
+VWO.markConversionForGoal = function (goal) {
   if (!goal) {
     throw new Error('Must pass Goal name');
   }
@@ -158,3 +158,5 @@ VWO.version = function(success) {
 };
 
 module.exports = VWO;
+
+});
