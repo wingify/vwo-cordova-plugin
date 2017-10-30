@@ -1,6 +1,5 @@
 /**
  */
-package android;
 
 import com.vwo.mobile.Initializer;
 import com.vwo.mobile.VWO;
@@ -51,13 +50,13 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         } else if (action.equals("launch")) {
 
             String apiKey = args.getString(0);
-            launchAsynchronously(apiKey, callbackContext);
+            launch(apiKey, callbackContext);
             return true;
 
         } else if (action.equals("launchWithCallback")) {
 
             String apiKey = args.getString(0);
-            launchAsynchronouslyWithCallback(apiKey, callbackContext);
+            launchWithCallback(apiKey, callbackContext);
             return true;
 
         } else if (action.equals("setCustomVariable")) {
@@ -75,7 +74,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         } else if (action.equals("variationForKey")) {
 
             String key = args.getString(0);
-            getVariation(key, callbackContext);
+            getVariationForKey(key, callbackContext);
             return true;
 
         } else if (action.equals("markConversionForGoal")) {
@@ -150,7 +149,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         });
     }
 
-    private void getVariation(final String key, final CallbackContext callbackContext) {
+    private void getVariationForKey(final String key, final CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 JSONObject wrapperObject = new JSONObject();
@@ -200,7 +199,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         });
     }
 
-    private void launchAsynchronously(final String apiKey, final CallbackContext callbackContext) {
+    private void launch(final String apiKey, final CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
 
@@ -241,7 +240,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         return retMap;
     }
 
-    private void launchAsynchronouslyWithCallback(final String apiKey, final CallbackContext callbackContext) {
+    private void launchWithCallback(final String apiKey, final CallbackContext callbackContext) {
 
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {

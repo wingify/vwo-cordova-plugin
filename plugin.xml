@@ -19,7 +19,7 @@
       </js-module>
       <config-file target="res/xml/config.xml" parent="/*">
         <feature name="VWOCordovaPlugin">
-          <param name="android-package" value="android.VWOCordovaPlugin" />
+          <param name="android-package" value="VWOCordovaPlugin" />
           <param name="onload" value="true" />
         </feature>
       </config-file>

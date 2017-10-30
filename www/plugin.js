@@ -23,7 +23,7 @@ VWO.setLogLevel = function(level){
   if (typeof level !== 'number') {
     throw new Error('Invalid log level');
   }
-  exec(function() {}, function() {}, PLUGIN_NAME, 'setLogLevel', [level]);
+  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'setLogLevel', [level]);
 };
 
 /** Launch VWO Synchronously
@@ -40,7 +40,7 @@ VWO.launchSynchronously = function(apiKey, timeout){
   if(!apiKey && typeof level !== 'string') {
     throw new Error('Invalid API Key');
   }
-  exec(function() {}, function() {}, PLUGIN_NAME, 'launchSynchronously', [apiKey, timeout]);
+  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'launchSynchronously', [apiKey, timeout]);
 };
 
 /** Launch VWO Asynchronously
@@ -53,7 +53,7 @@ VWO.launch = function(apiKey){
   if(!apiKey && typeof level !== 'string') {
     throw new Error('Invalid API Key');
   }
-  exec(function() {}, function() {}, PLUGIN_NAME, 'launch', [apiKey]);
+  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'launch', [apiKey]);
 };
 
 /** Launch VWO Asynchronously with Callback
@@ -83,7 +83,7 @@ VWO.variationForKey = function (success, key) {
   }
   exec( function(wrappedData) {
     success(wrappedData[key])
-  }, function() {}, PLUGIN_NAME, 'variationForKey', [key]);
+  }, function(error) {}, PLUGIN_NAME, 'variationForKey', [key]);
 };
 
 /** Get the Variation object for a key. Default value in case key is not found or null.
@@ -115,7 +115,7 @@ VWO.markConversionForGoal =function (goal) {
   if (!goal) {
     throw new Error('Must pass Goal name');
   }
-  exec(function() {}, function() {}, PLUGIN_NAME, 'markConversionForGoal', [goal]);
+  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'markConversionForGoal', [goal]);
 };
 
 /** Mark the conversion for goal with value
@@ -132,7 +132,7 @@ VWO.markConversionForGoalWithValue =function (goal, value) {
   if (!goal) {
     throw new Error('Must pass Goal name');
   }
-  exec(function() {}, function() {}, PLUGIN_NAME, 'markConversionForGoalWithValue', [goal, value]);
+  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'markConversionForGoalWithValue', [goal, value]);
 };
 
 /** Set custom variable by passing key and value
@@ -146,7 +146,7 @@ VWO.setCustomVariable = function(key, value){
   if(!key || !value) {
     throw new Error('Key or Value is null');
   }
-  exec(function() {}, function() {}, PLUGIN_NAME, 'setCustomVariable', [key, value]);
+  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'setCustomVariable', [key, value]);
 };
 
 /** Get the version of the SDK
@@ -155,7 +155,7 @@ VWO.setCustomVariable = function(key, value){
  * @param error {callback} Failure Callback
  */
 VWO.version = function(success) {
-  exec(success, function() {}, PLUGIN_NAME, 'version', []);
+  exec(success, function(error) {}, PLUGIN_NAME, 'version', []);
 };
 
 module.exports = VWO;
