@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class VWOCordovaPlugin extends CordovaPlugin {
 
@@ -44,6 +45,8 @@ public class VWOCordovaPlugin extends CordovaPlugin {
 
             String apiKey = args.getString(0);
             Long timeout = args.getLong(1);
+            // Convert timeout to milliseconds
+            timeout = TimeUnit.SECONDS.toMillis(timeout);
             launchSynchronously(apiKey, timeout, callbackContext);
             return true;
 

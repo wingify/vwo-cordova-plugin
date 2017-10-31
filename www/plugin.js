@@ -158,5 +158,3 @@ VWO.version = function(success) {
 };
 
 module.exports = VWO;
-
-});
