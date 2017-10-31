@@ -16,15 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 public class VWOCordovaPlugin extends CordovaPlugin {
 
-    private static final String TAG = VWOCordovaPlugin.class.getSimpleName();
     private VWOConfig mConfig;
     private ActivityLifecycleListener listener;
 
@@ -44,9 +37,9 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         if (action.equals("launchSynchronously")) {
 
             String apiKey = args.getString(0);
-            Long timeout = args.getLong(1);
+            Double timeoutInSeconds = args.getDouble(1);
             // Convert timeout to milliseconds
-            timeout = TimeUnit.SECONDS.toMillis(timeout);
+            Long timeout = timeoutInSeconds.longValue();
             launchSynchronously(apiKey, timeout, callbackContext);
             return true;
 
@@ -226,23 +219,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         });
     }
 
-    private VWOConfig getVWOConfig(HashMap<String, String> map) {
-        return new VWOConfig
-                .Builder()
-                .setLifecycleListener(new ActivityLifecycleListener())
-                .setCustomSegmentationMapping(map)
-                .build();
-    }
-
-    private HashMap<String, String> jsonToMap(JSONObject json) throws JSONException {
-        HashMap<String, String> retMap = new HashMap<String, String>();
-
-        if (json != JSONObject.NULL) {
-            retMap = toMap(json);
-        }
-        return retMap;
-    }
-
     private void launchWithCallback(final String apiKey, final CallbackContext callbackContext) {
 
         cordova.getActivity().runOnUiThread(new Runnable() {
@@ -284,26 +260,5 @@ public class VWOCordovaPlugin extends CordovaPlugin {
     public void onStart() {
         super.onStart();
         listener.onStart();
-    }
-
-    private HashMap<String, String> toMap(JSONObject object) throws JSONException {
-        HashMap<String, String> map = new HashMap<String, String>();
-        Iterator<String> keysItr = object.keys();
-        while (keysItr.hasNext()) {
-            String key = keysItr.next();
-            String value = (String) object.get(key);
-
-            map.put(key, value);
-        }
-        return map;
-    }
-
-    private List<String> toList(JSONArray array) throws JSONException {
-        List<String> list = new ArrayList<String>();
-        for (int i = 0; i < array.length(); i++) {
-            String value = (String) array.get(i);
-            list.add(value);
-        }
-        return list;
     }
 }
