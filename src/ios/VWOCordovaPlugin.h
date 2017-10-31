@@ -3,23 +3,22 @@
 @interface VWOCordovaPlugin : CDVPlugin {
 }
 
-// The hooks for our plugin commands
+- (void)setLogLevel:(CDVInvokedUrlCommand *)command;
+
 - (void)launchSynchronously:(CDVInvokedUrlCommand *)command;
 
-- (void)launchAsynchronously:(CDVInvokedUrlCommand *)command;
+- (void)launch:(CDVInvokedUrlCommand *)command;
 
-- (void)launchAsynchronouslyWithCallback:(CDVInvokedUrlCommand *)command;
+- (void)launchWithCallback:(CDVInvokedUrlCommand *)command;
 
-- (void)getVariationForKey: (CDVInvokedUrlCommand *)command;
+- (void)variationForKey:(CDVInvokedUrlCommand *)command;
 
-- (void)getVariationForKeyWithDefaultValue: (CDVInvokedUrlCommand *)command;
+- (void)markConversionForGoal:(CDVInvokedUrlCommand *)command;
 
-- (void)markConversionForGoal: (CDVInvokedUrlCommand *)command;
+- (void)markConversionForGoalWithValue:(CDVInvokedUrlCommand *)command;
 
-- (void)markConversionForGoalWithValue: (CDVInvokedUrlCommand *)command;
+- (void)setCustomVariable:(CDVInvokedUrlCommand *)command;
 
-- (void)version: (CDVInvokedUrlCommand *)command;
-
-- (void)setCustomVariable: (CDVInvokedUrlCommand *)command;
+- (void)version:(CDVInvokedUrlCommand *)command;
 
 @end

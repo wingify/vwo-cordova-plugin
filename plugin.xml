@@ -19,7 +19,7 @@
       </js-module>
       <config-file target="res/xml/config.xml" parent="/*">
         <feature name="VWOCordovaPlugin">
-          <param name="android-package" value="android.VWOCordovaPlugin" />
+          <param name="android-package" value="VWOCordovaPlugin" />
           <param name="onload" value="true" />
         </feature>
       </config-file>
@@ -29,7 +29,7 @@
 
     <!-- ios -->
     <platform name="ios">
-        <framework src="VWO" type="podspec" spec="~> 2.0.0-beta7" />
+        <framework src="VWO" type="podspec" spec="~> 2.0.0-beta10" />
         <js-module src="www/plugin.js" name="plugin">
             <runs/>
             <clobbers target="VWOCordovaPlugin" />

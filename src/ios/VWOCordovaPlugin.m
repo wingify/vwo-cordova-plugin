@@ -5,172 +5,80 @@
 
 @implementation VWOCordovaPlugin
 
-- (void)pluginInitialize {}
+- (void)setLogLevel:(CDVInvokedUrlCommand *)command {
+    int logLevel = [[command argumentAtIndex:0] intValue];
+    switch (logLevel) {//Refer plugin.js for log level values
+        case 1: [VWO setLogLevel:VWOLogLevelDebug]; break;
+        case 2: [VWO setLogLevel:VWOLogLevelInfo]; break;
+        case 3: [VWO setLogLevel:VWOLogLevelWarning]; break;
+        case 4: [VWO setLogLevel:VWOLogLevelError]; break;
+        case 5: [VWO setLogLevel:VWOLogLevelNone]; break;
+        default: break;
+    }
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+}
 
 - (void)launchSynchronously:(CDVInvokedUrlCommand *)command {
-  NSString* callbackId = [command callbackId];
-  NSString* apiKey = [[command arguments] objectAtIndex:0];
-  
-  CDVPluginResult* result;
-  if(apiKey != nil){
-    result = [CDVPluginResult
-                            resultWithStatus:CDVCommandStatus_OK
-                            messageAsString:@"VWO Initialized"];
-    [VWO launchSynchronouslyForAPIKey:apiKey];
-  }else{
-    result = [CDVPluginResult
-                              resultWithStatus:CDVCommandStatus_ERROR];
-  }
-
-  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+    NSString* apiKey = [command argumentAtIndex:0];
+    double timeout = [[command argumentAtIndex:1] doubleValue];
+    [VWO launchSynchronouslyForAPIKey:apiKey timeout:timeout];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
-- (void)launchAsynchronously:(CDVInvokedUrlCommand *)command{
-  NSString* callbackId = [command callbackId];
-  NSString* apiKey = [[command arguments] objectAtIndex:0];
-
-  CDVPluginResult* result;
-  if(apiKey != nil){
-    result = [CDVPluginResult 
-                            resultWithStatus: CDVCommandStatus_OK
-                            messageAsString:@"VWO Initialized"];
+- (void)launch:(CDVInvokedUrlCommand *)command {
+    NSString* apiKey = [command argumentAtIndex:0];
     [VWO launchForAPIKey:apiKey];
-  }else{
-    result = [CDVPluginResult 
-                            resultWithStatus:CDVCommandStatus_ERROR];
-  }
-  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
-- (void)launchAsynchronouslyWithCallback:(CDVInvokedUrlCommand *)command{
-  NSString* callbackId = [command callbackId];
-  NSString* apiKey = [[command arguments] objectAtIndex:0];
+- (void)launchWithCallback:(CDVInvokedUrlCommand *)command {
+    NSString* apiKey = [command argumentAtIndex:0];
 
-  CDVPluginResult* result;
-  if(apiKey != nil){
-    result = [CDVPluginResult
-                            resultWithStatus: CDVCommandStatus_OK
-                            messageAsString:@"VWO Initialized"];
     [VWO launchForAPIKey:apiKey completion:^{
-      [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+    } failure:^(NSString * _Nonnull error) {
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error"];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
-  }else{
-    result = [CDVPluginResult
-                            resultWithStatus:CDVCommandStatus_ERROR];
-    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-  }
 }
 
-- (void)getVariationForKey: (CDVInvokedUrlCommand *)command {
-  NSString* callbackId = [command callbackId];
-  NSString* key = [[command arguments] objectAtIndex:0];
+- (void)variationForKey:(CDVInvokedUrlCommand *)command {
+    NSString *key = [command argumentAtIndex:0];
+    id variation = [VWO variationForKey:key];
 
-  id variation = [VWO variationForKey:key];
-
-  CDVPluginResult* result;
-  if (variation != nil) {
-    NSDictionary *resultDictionary = @{
-        @"variableKey": key,
-        @"variableValue": variation
-      };
-    result = [CDVPluginResult
-                            resultWithStatus:CDVCommandStatus_OK
-                            messageAsDictionary:resultDictionary];
-  }else{
-    result = [CDVPluginResult
-              resultWithStatus:CDVCommandStatus_ERROR];
-  }
-
-  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+    CDVPluginResult* result;
+    if (variation == nil) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{key : [NSNull null]}];
+    } else {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{key : variation}];
+    }
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
-- (void)getVariationForKeyWithDefaultValue: (CDVInvokedUrlCommand *)command {
-  NSString* callbackId = [command callbackId];
-  NSString* key = [[command arguments] objectAtIndex:0];
-  NSObject* object = [[command arguments] objectAtIndex:1];
-
-  id variation = [VWO variationForKey:key defaultValue:object];
-
-  CDVPluginResult* result;
-  if (variation != nil) {
-    NSDictionary *resultDictionary = @{
-        @"variableKey": key,
-        @"variableValue": variation
-      };
-    result = [CDVPluginResult
-                            resultWithStatus:CDVCommandStatus_OK
-                            messageAsDictionary:resultDictionary];
-  }else{
-    result = [CDVPluginResult
-              resultWithStatus:CDVCommandStatus_ERROR];
-  }
-
-  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+- (void)markConversionForGoal:(CDVInvokedUrlCommand *)command {
+    NSString *goal = [command argumentAtIndex:0];
+    [VWO markConversionForGoal:goal];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
-- (void)markConversionForGoal: (CDVInvokedUrlCommand *)command{
-  NSString* callbackId = [command callbackId];
-  NSString* conversionGoal = [[command arguments] objectAtIndex:0];
-
-  CDVPluginResult* result;
-  if(conversionGoal!=nil){
-
-    [VWO markConversionForGoal:conversionGoal];
-    result = [CDVPluginResult
-                            resultWithStatus:CDVCommandStatus_OK
-                            messageAsString:@"Goal marked for Conversion!"];
-  }else{
-    result = [CDVPluginResult
-              resultWithStatus:CDVCommandStatus_ERROR];
-  }
-
-  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-
+- (void)markConversionForGoalWithValue:(CDVInvokedUrlCommand *)command {
+    NSString *goal = [command argumentAtIndex:0];
+    double value = [[command argumentAtIndex:1] doubleValue];
+    [VWO markConversionForGoal:goal withValue:value];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
-- (void)markConversionForGoalWithValue: (CDVInvokedUrlCommand *)command{
-  NSString* callbackId = [command callbackId];
-  NSString* conversionGoal = [[command arguments] objectAtIndex:0];
-  id value = [[command arguments] objectAtIndex:1];
-
-  CDVPluginResult* result;
-  if(conversionGoal!=nil){
-    [VWO markConversionForGoal:conversionGoal withValue:[value doubleValue]];
-    result = [CDVPluginResult
-                            resultWithStatus:CDVCommandStatus_OK
-                            messageAsString:@"Goal marked for Conversion!"];
-  }else{
-    result = [CDVPluginResult
-              resultWithStatus:CDVCommandStatus_ERROR];
-  }
-
-  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+- (void)setCustomVariable:(CDVInvokedUrlCommand *)command {
+    NSString *key = [command argumentAtIndex:0];
+    NSString *value = [command argumentAtIndex:1];
+    [VWO setCustomVariable:key withValue:value];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
-- (void)version: (CDVInvokedUrlCommand *)command{
-  NSString* callbackId = [command callbackId];
-
-  NSString* ver;
-  ver = [VWO version];
-  CDVPluginResult* result = [CDVPluginResult
-                                          resultWithStatus:CDVCommandStatus_OK];
-
-  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+- (void)version:(CDVInvokedUrlCommand *)command {
+    NSString *version = [VWO version];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:version];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
-
-- (void)setCustomVariable: (CDVInvokedUrlCommand *)command{
-  NSString* callbackId = [command callbackId];
-  NSString* key = [[command arguments] objectAtIndex:0];
-  NSString* value = [[command arguments] objectAtIndex:1];
-
-  [VWO setCustomVariable:key withValue:value];
-
-  CDVPluginResult* result = [CDVPluginResult
-                                          resultWithStatus:CDVCommandStatus_OK
-                                          messageAsString:@"Custom Variable set"];
-
-  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-}
-
 
 @end
