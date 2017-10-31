@@ -124,7 +124,7 @@ VWO.markConversionForGoal = function (goal) {
  * @param goal {string} Goal's name
  * @param value {double} Goal's value
  */
-VWO.markConversionForGoalWithValue =function (goal, value) {
+VWO.markConversionForGoalWithValue = function (goal, value) {
   if (typeof value !== 'number') {
     throw new Error('Value must be a number');
   }
