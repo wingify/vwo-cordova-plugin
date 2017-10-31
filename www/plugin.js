@@ -95,13 +95,13 @@ VWO.variationForKey = function (key, success) {
  * @return Variation object
  */
 VWO.variationForKeyWithDefaultValue = function(key, defaultValue, success){
-  var value = VWO.variationForKey(function(data) {
+  var value = VWO.variationForKey(key, function(data) {
       if (!data) {
       success(defaultValue);
     } else {
       success(data);
     }
-  }, key);
+  });
 };
 
 /** Mark the conversion for goal
