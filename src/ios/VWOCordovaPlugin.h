@@ -13,9 +13,9 @@
 
 - (void)variationForKey:(CDVInvokedUrlCommand *)command;
 
-- (void)markConversionForGoal:(CDVInvokedUrlCommand *)command;
+- (void)trackConversion:(CDVInvokedUrlCommand *)command;
 
-- (void)markConversionForGoalWithValue:(CDVInvokedUrlCommand *)command;
+- (void)trackConversionWithValue:(CDVInvokedUrlCommand *)command;
 
 - (void)setCustomVariable:(CDVInvokedUrlCommand *)command;
 
