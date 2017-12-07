@@ -26,6 +26,19 @@ VWO.setLogLevel = function(level){
   exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'setLogLevel', [level]);
 };
 
+/** Opt out from VWO
+ *
+ * @param success {callback} Success Callback
+ * @param error {callback} Failure Callback
+ * @param optOut {boolean} optOut
+ */
+VWO.setOptOut = function(optOut){
+  if (typeof optOut !== 'boolean') {
+    throw new Error('optOut must be boolean');
+  }
+  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'setOptOut', [optOut]);
+};
+
 /** Launch VWO Synchronously
  *
  * @param success {callback} Success Callback

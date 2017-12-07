@@ -18,6 +18,12 @@
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
+- (void)setOptOut:(CDVInvokedUrlCommand *)command {
+    BOOL optOut = [[command argumentAtIndex:0] boolValue];
+    [VWO setOptOut:optOut];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];    
+}
+
 - (void)launchSynchronously:(CDVInvokedUrlCommand *)command {
     NSString* apiKey = [command argumentAtIndex:0];
     double timeout = [[command argumentAtIndex:1] doubleValue];
