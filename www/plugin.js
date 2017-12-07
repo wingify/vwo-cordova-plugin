@@ -123,11 +123,11 @@ VWO.variationForKeyWithDefaultValue = function(key, defaultValue, success){
  * @param error {callback} Failure Callback
  * @param goal {string} Goal's name
  */
-VWO.markConversionForGoal = function (goal) {
+VWO.trackConversion = function (goal) {
   if (!goal) {
     throw new Error('Must pass Goal name');
   }
-  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'markConversionForGoal', [goal]);
+  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'trackConversion', [goal]);
 };
 
 /** Mark the conversion for goal with value
@@ -137,14 +137,14 @@ VWO.markConversionForGoal = function (goal) {
  * @param goal {string} Goal's name
  * @param value {double} Goal's value
  */
-VWO.markConversionForGoalWithValue = function (goal, value) {
+VWO.trackConversionWithValue = function (goal, value) {
   if (typeof value !== 'number') {
     throw new Error('Value must be a number');
   }
   if (!goal) {
     throw new Error('Must pass Goal name');
   }
-  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'markConversionForGoalWithValue', [goal, value]);
+  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'trackConversionWithValue', [goal, value]);
 };
 
 /** Set custom variable by passing key and value
