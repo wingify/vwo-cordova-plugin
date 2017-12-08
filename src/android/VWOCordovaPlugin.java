@@ -1,6 +1,3 @@
-/**
- */
-
 import com.vwo.mobile.Initializer;
 import com.vwo.mobile.VWO;
 import com.vwo.mobile.VWOConfig;
@@ -37,7 +34,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         if (action.equals("launchSynchronously")) {
 
             String apiKey = args.getString(0);
-            Double timeoutInSeconds = args.getDouble(1);
+            Double timeoutInSeconds = args.getDouble(1) * 1000;
             // Convert timeout to milliseconds
             Long timeout = timeoutInSeconds.longValue();
             launchSynchronously(apiKey, timeout, callbackContext);
@@ -73,18 +70,22 @@ public class VWOCordovaPlugin extends CordovaPlugin {
             getVariationForKey(key, callbackContext);
             return true;
 
-        } else if (action.equals("markConversionForGoal")) {
+        } else if (action.equals("trackConversion")) {
 
             String goalIdentifier = args.getString(0);
-            markConversionForGoal(goalIdentifier, callbackContext);
+            trackConversion(goalIdentifier, callbackContext);
             return true;
 
-        } else if (action.equals("markConversionForGoalWithValue")) {
+        } else if (action.equals("trackConversionWithValue")) {
 
             String goalIdentifier = args.getString(0);
             double value = Double.parseDouble(args.getString(1));
-            markConversionForGoalWithValue(goalIdentifier, value, callbackContext);
+            trackConversionWithValue(goalIdentifier, value, callbackContext);
             return true;
+
+        } else if(action.equals("setOptOut")) {
+            boolean optOut = args.getBoolean(0);
+            setOptOut(optOut);
 
         } else if (action.equals("setLogLevel")) {
             int logLevel = args.getInt(0);
@@ -129,18 +130,18 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         });
     }
 
-    private void markConversionForGoal(final String goalIdentifier, final CallbackContext callbackContext) {
+    private void trackConversion(final String goalIdentifier, final CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
-                VWO.markConversionForGoal(goalIdentifier);
+                VWO.trackConversion(goalIdentifier);
             }
         });
     }
 
-    private void markConversionForGoalWithValue(final String goalIdentifier, final double value, final CallbackContext callbackContext) {
+    private void trackConversionWithValue(final String goalIdentifier, final double value, final CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
-                VWO.markConversionForGoal(goalIdentifier, value);
+                VWO.trackConversion(goalIdentifier, value);
             }
         });
     }
@@ -191,6 +192,15 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 callbackContext.success(VWO.version());
+            }
+        });
+    }
+
+    private void setOptOut(final boolean optOut) {
+        cordova.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                VWO.setOptOut(optOut);
             }
         });
     }
