@@ -32,7 +32,7 @@
 
     <!-- ios -->
     <platform name="ios">
-        <framework src="VWO" type="podspec" spec="~> 2.1.0" />
+        <framework src="VWO" type="podspec" spec="~> 2.2.0" />
         <js-module src="www/plugin.js" name="plugin">
             <runs/>
             <clobbers target="VWOCordovaPlugin" />
