@@ -61,8 +61,10 @@ VWO.launchSynchronously = function(apiKey, timeout){
  * @param success {callback} Success Callback
  * @param error {callback} Failure Callback
  * @param apiKey {string} The App Key generated in VWO's console
+ * @deprecated Deprecated in favour of launchWithCallback
  */
 VWO.launch = function(apiKey){
+  console.warn("Deprecated. Use VWO.launchWithCallback instead."); 
   if(!apiKey && typeof level !== 'string') {
     throw new Error('Invalid API Key');
   }
@@ -89,8 +91,11 @@ VWO.launchWithCallback = function(apiKey, success, error){
  * @param key {string} Key for the campaign
  *
  * @return Variation object
+ *
+ * @deprecated Deprecated in favour of variationForKeyWithDefaultValue
  */
 VWO.variationForKey = function (key, success) {
+  console.warn("Deprecated. Use VWO.variationForKeyWithDefaultValue instead."); 
   if (!key) {
     throw new Error('Must pass Key for Campaign');
   }
