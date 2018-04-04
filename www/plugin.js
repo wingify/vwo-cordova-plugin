@@ -3,7 +3,14 @@ var exec = require('cordova/exec');
 
 var PLUGIN_NAME = 'VWOCordovaPlugin';
 
-//noinspection JSUnusedGlobalSymbols
+module.exports = VWOConfig;
+
+// Default config object
+const var vwoConfig = {
+  optOut: false,
+  customVariables: {}
+  disablePreview: false
+}
 
 var VWO = function () {};
 
@@ -26,62 +33,51 @@ VWO.setLogLevel = function(level){
   exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'setLogLevel', [level]);
 };
 
-/** Opt out from VWO
- *
- * @param success {callback} Success Callback
- * @param error {callback} Failure Callback
- * @param optOut {boolean} optOut
- */
-VWO.setOptOut = function(optOut){
-  if (typeof optOut !== 'boolean') {
-    throw new Error('optOut must be boolean');
+function validatedConfig(config) {
+  if (config === null  || config === undefined) {
+    return vwoConfig;
   }
-  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'setOptOut', [optOut]);
-};
+  var finalConfig = {};
+  for (prop in vwoConfig) {
+      if (typeof(config[prop]) !== "undefined" && typeof(config[prop]) === typeof(vwoConfig[prop])) {
+        finalConfig[prop] = config[prop];
+      } else {
+        finalConfig[prop] = vwoConfig[prop];
+      }
+  }
+  return finalConfig;
+}
 
-/** Launch VWO Synchronously
+/** Launch VWO synchronously
  *
- * @param success {callback} Success Callback
- * @param error {callback} Failure Callback
  * @param apiKey {string} The App Key generated in VWO's console
  * @param timeout {number} Connection Timeout of API
+ * @param config {Object} Launch configuration
  */
-VWO.launchSynchronously = function(apiKey, timeout){
+VWO.launchSynchronously = function(apiKey, timeout, config){
   if (typeof timeout !== 'number') {
     throw new Error('timeout must be a number');
   }
   if(!apiKey && typeof level !== 'string') {
     throw new Error('Invalid API Key');
   }
-  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'launchSynchronously', [apiKey, timeout]);
+  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'launchSynchronously', [apiKey, timeout, config]);
 };
 
-/** Launch VWO Asynchronously
+
+/** Launch VWO asynchronously with Callback
  *
- * @param success {callback} Success Callback
- * @param error {callback} Failure Callback
  * @param apiKey {string} The App Key generated in VWO's console
- * @deprecated Deprecated in favour of launchWithCallback
- */
-VWO.launch = function(apiKey){
-  console.warn("Deprecated. Use VWO.launchWithCallback instead."); 
-  if(!apiKey && typeof level !== 'string') {
-    throw new Error('Invalid API Key');
-  }
-  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'launch', [apiKey]);
-};
-
-/** Launch VWO Asynchronously with Callback
- *
+ * @param config {Object} Launch configuration
  * @param success {callback} Success Callback
  * @param failureCallback {callback} Failure Callback
- * @param apiKey {string} The App Key generated in VWO's console
  */
-VWO.launchWithCallback = function(apiKey, success, error){
+VWO.launchWithCallback = function(apiKey, config, success, error){
   if(!apiKey) {
     throw new Error('Must pass in a API Key');
   }
-  exec(success, error, PLUGIN_NAME, 'launchWithCallback', [apiKey]);
+
+  exec(success, error, PLUGIN_NAME, 'launchWithCallback', [apiKey, validatedConfig(config)]);
 };
 
 /** Get the Variation object for a key
@@ -150,20 +146,6 @@ VWO.trackConversionWithValue = function (goal, value) {
     throw new Error('Must pass Goal name');
   }
   exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'trackConversionWithValue', [goal, value]);
-};
-
-/** Set custom variable by passing key and value
- *
- * @param success {callback} Success Callback
- * @param error {callback} Failure Callback
- * @param key {string} Key
- * @param value {string} Value
- */
-VWO.setCustomVariable = function(key, value){
-  if(!key || !value) {
-    throw new Error('Key or Value is null');
-  }
-  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'setCustomVariable', [key, value]);
 };
 
 /** Get the version of the SDK
