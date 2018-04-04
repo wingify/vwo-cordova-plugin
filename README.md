@@ -9,8 +9,6 @@ A/B Testing Plugin for platforms such as Ionic, Phonegap, Crosswalk, Intel XDK
 
 # Installation
 
-### Edge
-
 `cordova plugin add vwo-cordova-plugin`
 
 # Uninstall plugin
