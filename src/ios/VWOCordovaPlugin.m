@@ -18,22 +18,10 @@
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
-- (void)setOptOut:(CDVInvokedUrlCommand *)command {
-    BOOL optOut = [[command argumentAtIndex:0] boolValue];
-    [VWO setOptOut:optOut];
-    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];    
-}
-
 - (void)launchSynchronously:(CDVInvokedUrlCommand *)command {
     NSString* apiKey = [command argumentAtIndex:0];
     double timeout = [[command argumentAtIndex:1] doubleValue];
     [VWO launchSynchronouslyForAPIKey:apiKey timeout:timeout];
-    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-}
-
-- (void)launch:(CDVInvokedUrlCommand *)command {
-    NSString* apiKey = [command argumentAtIndex:0];
-    [VWO launchForAPIKey:apiKey];
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
@@ -71,13 +59,6 @@
     NSString *goal = [command argumentAtIndex:0];
     double value = [[command argumentAtIndex:1] doubleValue];
     [VWO trackConversion:goal withValue:value];
-    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-}
-
-- (void)setCustomVariable:(CDVInvokedUrlCommand *)command {
-    NSString *key = [command argumentAtIndex:0];
-    NSString *value = [command argumentAtIndex:1];
-    [VWO setCustomVariable:key withValue:value];
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
