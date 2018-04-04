@@ -61,7 +61,12 @@ VWO.launchSynchronously = function(apiKey, timeout, config){
   if(!apiKey && typeof level !== 'string') {
     throw new Error('Invalid API Key');
   }
-  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'launchSynchronously', [apiKey, timeout, config]);
+  exec(function(data) {},
+    function(error) {},
+    PLUGIN_NAME,
+    'launchSynchronously',
+    [apiKey, timeout, validatedConfig(config)]
+  );
 };
 
 
