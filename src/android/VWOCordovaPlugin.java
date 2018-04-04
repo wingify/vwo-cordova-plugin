@@ -13,9 +13,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 public class VWOCordovaPlugin extends CordovaPlugin {
 
-    private VWOConfig mConfig;
     private ActivityLifecycleListener listener;
 
     private static final int LOG_LEVEL_DEBUG = 1;
@@ -24,10 +27,13 @@ public class VWOCordovaPlugin extends CordovaPlugin {
     private static final int LOG_LEVEL_ERROR = 4;
     private static final int LOG_LEVEL_OFF = 5;
 
+    private static final String OPT_OUT = "optOut";
+    private static final String DISABLE_PREVIEW = "disablePreview";
+    private static final String CUSTOM_VARIABLES = "customVariables";
+
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
         listener = new ActivityLifecycleListener();
-        mConfig = new VWOConfig.Builder().setLifecycleListener(listener).build();
     }
 
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -37,26 +43,22 @@ public class VWOCordovaPlugin extends CordovaPlugin {
             Double timeoutInSeconds = args.getDouble(1) * 1000;
             // Convert timeout to milliseconds
             Long timeout = timeoutInSeconds.longValue();
-            launchSynchronously(apiKey, timeout, callbackContext);
+            VWOConfig vwoConfig = parseJSONToConfig(args.getJSONObject(2));
+            launchSynchronously(apiKey, timeout, vwoConfig, callbackContext);
             return true;
 
         } else if (action.equals("launch")) {
 
             String apiKey = args.getString(0);
-            launch(apiKey, callbackContext);
+            VWOConfig vwoConfig = parseJSONToConfig(args.getJSONObject(1));
+            launch(apiKey, vwoConfig, callbackContext);
             return true;
 
         } else if (action.equals("launchWithCallback")) {
 
             String apiKey = args.getString(0);
-            launchWithCallback(apiKey, callbackContext);
-            return true;
-
-        } else if (action.equals("setCustomVariable")) {
-
-            String key = args.getString(0);
-            String value = args.getString(1);
-            setCustomVariable(key, value, callbackContext);
+            VWOConfig vwoConfig = parseJSONToConfig(args.getJSONObject(1));
+            launchWithCallback(apiKey, vwoConfig, callbackContext);
             return true;
 
         } else if (action.equals("version")) {
@@ -82,10 +84,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
             double value = Double.parseDouble(args.getString(1));
             trackConversionWithValue(goalIdentifier, value, callbackContext);
             return true;
-
-        } else if(action.equals("setOptOut")) {
-            boolean optOut = args.getBoolean(0);
-            setOptOut(optOut);
 
         } else if (action.equals("setLogLevel")) {
             int logLevel = args.getInt(0);
@@ -120,7 +118,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
-                if(logLevel == -1) {
+                if (logLevel == -1) {
                     callbackContext.error("Failed to change log level");
                 } else {
                     VWOLog.setLogLevel(logLevel);
@@ -146,11 +144,39 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         });
     }
 
+    private VWOConfig parseJSONToConfig(JSONObject jsonObject) throws JSONException {
+        VWOConfig.Builder vwoConfigBuilder = new VWOConfig.Builder();
+        vwoConfigBuilder.setLifecycleListener(listener);
+        if (jsonObject.has(DISABLE_PREVIEW) && jsonObject.getBoolean(DISABLE_PREVIEW)) {
+            vwoConfigBuilder.disablePreview();
+        }
+        if (jsonObject.has(OPT_OUT)) {
+            vwoConfigBuilder.setOptOut(jsonObject.getBoolean(OPT_OUT));
+        }
+        if (jsonObject.has(CUSTOM_VARIABLES)) {
+            vwoConfigBuilder.setCustomVariables(JSONtoMap(jsonObject.getJSONObject(CUSTOM_VARIABLES)));
+        }
+
+        return vwoConfigBuilder.build();
+    }
+
+
+    private static Map<String, String> JSONtoMap(JSONObject object) throws JSONException {
+        Map<String, String> map = new HashMap<String, String>();
+
+        Iterator<String> keysItr = object.keys();
+        while (keysItr.hasNext()) {
+            String key = keysItr.next();
+            map.put(key, object.getString(key));
+        }
+        return map;
+    }
+
     private void getVariationForKey(final String key, final CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 JSONObject wrapperObject = new JSONObject();
-                Object object = VWO.getVariationForKey(key);
+                Object object = VWO.getVariationForKey(key, null);
 
                 if (object == null) {
                     try {
@@ -171,18 +197,10 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         });
     }
 
-    private void setCustomVariable(final String key, final String value, final CallbackContext callbackContext) {
+    private void launchSynchronously(final String apiKey, final Long timeout, final VWOConfig config, final CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
-                VWO.setCustomVariable(key, value);
-            }
-        });
-    }
-
-    private void launchSynchronously(final String apiKey, final Long timeout, final CallbackContext callbackContext) {
-        cordova.getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-                VWO.with(cordova.getActivity(), apiKey).config(mConfig).launchSynchronously(timeout);
+                VWO.with(cordova.getActivity(), apiKey).config(config).launchSynchronously(timeout);
                 callbackContext.success("VWO Initialized");
             }
         });
@@ -196,21 +214,12 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         });
     }
 
-    private void setOptOut(final boolean optOut) {
-        cordova.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                VWO.setOptOut(optOut);
-            }
-        });
-    }
-
-    private void launch(final String apiKey, final CallbackContext callbackContext) {
+    private void launch(final String apiKey, final VWOConfig config, final CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
 
-                Initializer initializer = VWO.with(cordova.getActivity(), apiKey).config(mConfig);
-                if(callbackContext != null) {
+                Initializer initializer = VWO.with(cordova.getActivity(), apiKey).config(config);
+                if (callbackContext != null) {
                     initializer.launch(new VWOStatusListener() {
                         @Override
                         public void onVWOLoaded() {
@@ -223,17 +232,17 @@ public class VWOCordovaPlugin extends CordovaPlugin {
                         }
                     });
                 } else {
-                    initializer.launch();
+                    initializer.launch(null);
                 }
             }
         });
     }
 
-    private void launchWithCallback(final String apiKey, final CallbackContext callbackContext) {
+    private void launchWithCallback(final String apiKey, final VWOConfig config, final CallbackContext callbackContext) {
 
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
-                VWO.with(cordova.getActivity(), apiKey).config(mConfig).launch(new VWOStatusListener() {
+                VWO.with(cordova.getActivity(), apiKey).config(config).launch(new VWOStatusListener() {
                     @Override
                     public void onVWOLoaded() {
                         callbackContext.success("VWO Loaded");
