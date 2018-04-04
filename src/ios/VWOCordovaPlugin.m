@@ -18,18 +18,32 @@
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
+- (VWOConfig *)vwoConfigFromDictionary:(NSDictionary *)configDict {
+    VWOConfig *config = [VWOConfig new];
+    config.disablePreview = [configDict[@"disablePreview"] boolValue];
+    config.optOut = [configDict[@"optOut"] boolValue];
+    config.customVariables = configDict[@"customVariables"];
+    return config;
+}
+
 - (void)launchSynchronously:(CDVInvokedUrlCommand *)command {
     NSString* apiKey = [command argumentAtIndex:0];
     double timeout = [[command argumentAtIndex:1] doubleValue];
-    [VWO launchSynchronouslyForAPIKey:apiKey timeout:timeout];
+    NSDictionary *configDict = [command argumentAtIndex:2];
+    VWOConfig *vwoConfig = [self vwoConfigFromDictionary:configDict];
+    [VWO launchSynchronouslyForAPIKey:apiKey timeout:timeout config:vwoConfig];
+
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
 - (void)launchWithCallback:(CDVInvokedUrlCommand *)command {
     NSString* apiKey = [command argumentAtIndex:0];
+    NSDictionary *configDict = [command argumentAtIndex:2];
+    VWOConfig *vwoConfig = [self vwoConfigFromDictionary:configDict];
 
-    [VWO launchForAPIKey:apiKey completion:^{
+    [VWO launchForAPIKey:apiKey config:vwoConfig completion:^{
         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+
     } failure:^(NSString * _Nonnull error) {
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error"];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
