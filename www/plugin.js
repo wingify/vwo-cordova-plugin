@@ -3,14 +3,12 @@ var exec = require('cordova/exec');
 
 var PLUGIN_NAME = 'VWOCordovaPlugin';
 
-module.exports = VWOConfig;
-
 // Default config object
 const vwoConfig = {
   optOut: false,
-  customVariables: {}
+  customVariables: {},
   disablePreview: false
-}
+};
 
 var VWO = function () {};
 

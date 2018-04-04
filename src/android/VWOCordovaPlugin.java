@@ -167,7 +167,11 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         Iterator<String> keysItr = object.keys();
         while (keysItr.hasNext()) {
             String key = keysItr.next();
-            map.put(key, object.getString(key));
+            if(object.isNull(key)) {
+                map.put(key, null);
+            } else {
+                map.put(key, object.getString(key));
+            }
         }
         return map;
     }
