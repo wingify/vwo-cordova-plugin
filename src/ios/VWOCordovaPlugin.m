@@ -38,7 +38,7 @@
 
 - (void)launchWithCallback:(CDVInvokedUrlCommand *)command {
     NSString* apiKey = [command argumentAtIndex:0];
-    NSDictionary *configDict = [command argumentAtIndex:2];
+    NSDictionary *configDict = [command argumentAtIndex:1];
     VWOConfig *vwoConfig = [self vwoConfigFromDictionary:configDict];
 
     [VWO launchForAPIKey:apiKey config:vwoConfig completion:^{
