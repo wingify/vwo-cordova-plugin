@@ -1,8 +1,7 @@
 repositories {
   jcenter()
   maven {
-      // url "https://raw.githubusercontent.com/wingify/vwo-mobile-android/hybrid/"
-      url uri('/Users/aman/git/vwo-mobile-android')
+      url "https://raw.githubusercontent.com/wingify/vwo-mobile-android/hybrid/"
   }
 }
 
