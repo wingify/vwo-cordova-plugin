@@ -6,7 +6,7 @@ var PLUGIN_NAME = 'VWOCordovaPlugin';
 module.exports = VWOConfig;
 
 // Default config object
-const var vwoConfig = {
+const vwoConfig = {
   optOut: false,
   customVariables: {}
   disablePreview: false

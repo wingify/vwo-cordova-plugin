@@ -1,12 +1,13 @@
 repositories {
   jcenter()
   maven {
-      url "https://raw.githubusercontent.com/wingify/vwo-mobile-android/hybrid/"
+      // url "https://raw.githubusercontent.com/wingify/vwo-mobile-android/hybrid/"
+      url uri('/Users/aman/git/vwo-mobile-android')
   }
 }
 
 dependencies {
-    compile 'com.vwo:mobile:2.2.0@aar'
+    compile 'com.vwo:mobile:2.3.0@aar'
     compile ('io.socket:socket.io-client:1.0.0') {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
