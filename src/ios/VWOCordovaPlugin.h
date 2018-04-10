@@ -7,7 +7,7 @@
 
 - (void)launchSynchronously:(CDVInvokedUrlCommand *)command;
 
-- (void)launchWithCallback:(CDVInvokedUrlCommand *)command;
+- (void)launch:(CDVInvokedUrlCommand *)command;
 
 - (void)variationForKey:(CDVInvokedUrlCommand *)command;
 

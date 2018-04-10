@@ -36,7 +36,7 @@
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
-- (void)launchWithCallback:(CDVInvokedUrlCommand *)command {
+- (void)launch:(CDVInvokedUrlCommand *)command {
     NSString* apiKey = [command argumentAtIndex:0];
     NSDictionary *configDict = [command argumentAtIndex:1];
     VWOConfig *vwoConfig = [self vwoConfigFromDictionary:configDict];
