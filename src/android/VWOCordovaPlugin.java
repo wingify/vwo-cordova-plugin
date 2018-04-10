@@ -54,13 +54,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
             launch(apiKey, vwoConfig, callbackContext);
             return true;
 
-        } else if (action.equals("launchWithCallback")) {
-
-            String apiKey = args.getString(0);
-            VWOConfig vwoConfig = parseJSONToConfig(args.getJSONObject(1));
-            launchWithCallback(apiKey, vwoConfig, callbackContext);
-            return true;
-
         } else if (action.equals("version")) {
 
             getVersion(callbackContext);
@@ -219,30 +212,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
     }
 
     private void launch(final String apiKey, final VWOConfig config, final CallbackContext callbackContext) {
-        cordova.getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-
-                Initializer initializer = VWO.with(cordova.getActivity(), apiKey).config(config);
-                if (callbackContext != null) {
-                    initializer.launch(new VWOStatusListener() {
-                        @Override
-                        public void onVWOLoaded() {
-                            callbackContext.success("VWO Initialized");
-                        }
-
-                        @Override
-                        public void onVWOLoadFailure(String reason) {
-                            callbackContext.error(reason);
-                        }
-                    });
-                } else {
-                    initializer.launch(null);
-                }
-            }
-        });
-    }
-
-    private void launchWithCallback(final String apiKey, final VWOConfig config, final CallbackContext callbackContext) {
 
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
