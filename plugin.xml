@@ -33,7 +33,7 @@
     <platform name="ios">
         <pods-config ios-min-version="9.0" use-frameworks="true">
         </pods-config>
-        <pod name="VWO" git="https://github.com/wingify/vwo-ios-sdk" branch="socket" />
+        <pod name="VWO"/>
         <js-module src="www/plugin.js" name="plugin">
             <runs/>
             <clobbers target="VWOCordovaPlugin" />
