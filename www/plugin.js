@@ -75,12 +75,12 @@ VWO.launchSynchronously = function(apiKey, timeout, config){
  * @param success {callback} Success Callback
  * @param failureCallback {callback} Failure Callback
  */
-VWO.launchWithCallback = function(apiKey, config, success, error){
+VWO.launch = function(apiKey, config, success, error){
   if(!apiKey) {
     throw new Error('Must pass in a API Key');
   }
 
-  exec(success, error, PLUGIN_NAME, 'launchWithCallback', [apiKey, validatedConfig(config)]);
+  exec(success, error, PLUGIN_NAME, 'launch', [apiKey, validatedConfig(config)]);
 };
 
 /** Get the Variation object for a key
