@@ -109,7 +109,7 @@ VWO.variationNameForTestKey = function(testKey, success) {
   if(!testKey) {
       throw new Error('Must pass valid testKey');
   }
-  exec(success, function(error) {}, PLUGIN_NAME, 'variationNameForTestKey', []);
+  exec(success, function(error) {}, PLUGIN_NAME, 'variationNameForTestKey', [testKey]);
 }
 
 /** Mark the conversion for goal

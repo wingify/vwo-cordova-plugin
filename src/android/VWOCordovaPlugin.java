@@ -1,4 +1,3 @@
-import com.vwo.mobile.Initializer;
 import com.vwo.mobile.VWO;
 import com.vwo.mobile.VWOConfig;
 import com.vwo.mobile.events.VWOStatusListener;
@@ -38,7 +37,6 @@ public class VWOCordovaPlugin extends CordovaPlugin {
 
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
         if (action.equals("launchSynchronously")) {
-
             String apiKey = args.getString(0);
             Double timeoutInSeconds = args.getDouble(1) * 1000;
             // Convert timeout to milliseconds
@@ -48,31 +46,26 @@ public class VWOCordovaPlugin extends CordovaPlugin {
             return true;
 
         } else if (action.equals("launch")) {
-
             String apiKey = args.getString(0);
             VWOConfig vwoConfig = parseJSONToConfig(args.getJSONObject(1));
             launch(apiKey, vwoConfig, callbackContext);
             return true;
 
         } else if (action.equals("version")) {
-
             getVersion(callbackContext);
             return true;
 
-        } else if (action.equals("variationForKey")) {
-
+        } else if (action.equals("objectForKey")) {
             String key = args.getString(0);
             getVariationForKey(key, callbackContext);
             return true;
 
         } else if (action.equals("trackConversion")) {
-
             String goalIdentifier = args.getString(0);
             trackConversion(goalIdentifier, callbackContext);
             return true;
 
         } else if (action.equals("trackConversionWithValue")) {
-
             String goalIdentifier = args.getString(0);
             double value = Double.parseDouble(args.getString(1));
             trackConversionWithValue(goalIdentifier, value, callbackContext);
@@ -81,6 +74,13 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         } else if (action.equals("setLogLevel")) {
             int logLevel = args.getInt(0);
             setLogLevel(logLevel, callbackContext);
+            return true;
+
+        } else if (action.equals("variationNameForTestKey")) {
+            String testKey = args.getString(0);
+            variationNameForTestKey(testKey, callbackContext);
+            return true;
+
         }
         return false;
     }
@@ -116,6 +116,19 @@ public class VWOCordovaPlugin extends CordovaPlugin {
                 } else {
                     VWOLog.setLogLevel(logLevel);
                     callbackContext.success("Log level changed successfully");
+                }
+            }
+        });
+    }
+
+    private void variationNameForTestKey(final String testKey, final CallbackContext callbackContext) {
+        cordova.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    callbackContext.success(VWO.getVariationNameForTestKey(testKey));
+                } catch (Exception exception) {
+                    VWOLog.e(VWOLog.DATA_LOGS, exception, true, true);
                 }
             }
         });
@@ -160,7 +173,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         Iterator<String> keysItr = object.keys();
         while (keysItr.hasNext()) {
             String key = keysItr.next();
-            if(object.isNull(key)) {
+            if (object.isNull(key)) {
                 map.put(key, null);
             } else {
                 map.put(key, object.getString(key));
@@ -173,21 +186,21 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 JSONObject wrapperObject = new JSONObject();
-                Object object = VWO.getVariationForKey(key, null);
+                Object object = VWO.getObjectForKey(key, null);
 
                 if (object == null) {
                     try {
                         wrapperObject.put(key, JSONObject.NULL);
                         callbackContext.success(wrapperObject);
                     } catch (JSONException exception) {
-                        VWOLog.e(VWOLog.DATA, exception, false, false);
+                        VWOLog.e(VWOLog.DATA_LOGS, exception, false, false);
                     }
                 } else {
                     try {
                         wrapperObject.put(key, object);
                         callbackContext.success(wrapperObject);
                     } catch (JSONException exception) {
-                        VWOLog.e(VWOLog.DATA, exception, false, false);
+                        VWOLog.e(VWOLog.DATA_LOGS, exception, false, false);
                     }
                 }
             }
