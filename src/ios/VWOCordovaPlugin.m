@@ -50,9 +50,12 @@
     }];
 }
 
-- (void)variationForKey:(CDVInvokedUrlCommand *)command {
+- (void)objectForKey:(CDVInvokedUrlCommand *)command {
     NSString *key = [command argumentAtIndex:0];
-    id variation = [VWO variationForKey:key];
+
+    // default value is always nil as Java does not support General object type.
+    // Hence value is inserted in Dictionary and then sent
+    id variation = [VWO objectForKey:key defaultValue:nil];
 
     CDVPluginResult* result;
     if (variation == nil) {
@@ -60,6 +63,14 @@
     } else {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{key : variation}];
     }
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)variationNameForTestKey:(CDVInvokedUrlCommand *)command {
+    NSString *testKey = [command argumentAtIndex:0];
+
+    NSString *variationName = [VWO variationNameForTestKey:testKey];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:variationName];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
