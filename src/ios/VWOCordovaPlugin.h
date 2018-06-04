@@ -9,7 +9,9 @@
 
 - (void)launch:(CDVInvokedUrlCommand *)command;
 
-- (void)variationForKey:(CDVInvokedUrlCommand *)command;
+- (void)objectForKey:(CDVInvokedUrlCommand *)command;
+
+- (void)variationNameForTestKey:(CDVInvokedUrlCommand *)command;
 
 - (void)trackConversion:(CDVInvokedUrlCommand *)command;
 
