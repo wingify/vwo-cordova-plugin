@@ -90,11 +90,8 @@ VWO.launch = function(apiKey, config, success, error){
  * @param key {string} Key for the campaign
  * @param defaultValue {value} Default Value
  * @return Variation object
- *
- * @deprecated Deprecated in favour of variationForKeyWithDefaultValue
  */
-VWO.variationForKey = function (key, defaultValue, success) {
-  console.warn("Deprecated. Use VWO.variationForKeyWithDefaultValue instead."); 
+VWO.objectForKey = function (key, defaultValue, success) {
   if (!key) {
     throw new Error('Must pass Key for Campaign');
   }
@@ -104,8 +101,16 @@ VWO.variationForKey = function (key, defaultValue, success) {
     } else {
       success(data[key]);
     }
-  }, function(error) {}, PLUGIN_NAME, 'variationForKey', [key]);
+  }, function(error) {}, PLUGIN_NAME, 'objectForKey', [key]);
 };
+
+
+VWO.variationNameForTestKey = function(testKey, success) {
+  if(!testKey) {
+      throw new Error('Must pass valid testKey');
+  }
+  exec(success, function(error) {}, PLUGIN_NAME, 'variationNameForTestKey', [testKey]);
+}
 
 /** Mark the conversion for goal
  *
