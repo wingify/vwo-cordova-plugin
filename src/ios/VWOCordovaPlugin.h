@@ -9,6 +9,14 @@
 
 - (void)launch:(CDVInvokedUrlCommand *)command;
 
+- (void)intForKey:(CDVInvokedUrlCommand *)command;
+
+- (void)floatForKey:(CDVInvokedUrlCommand *)command;
+
+- (void)boolForKey:(CDVInvokedUrlCommand *)command;
+
+- (void)stringForKey:(CDVInvokedUrlCommand *)command;
+
 - (void)objectForKey:(CDVInvokedUrlCommand *)command;
 
 - (void)variationNameForTestKey:(CDVInvokedUrlCommand *)command;

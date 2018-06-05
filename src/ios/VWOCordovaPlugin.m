@@ -18,6 +18,7 @@
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
+//Private
 - (VWOConfig *)vwoConfigFromDictionary:(NSDictionary *)configDict {
     VWOConfig *config = [VWOConfig new];
     config.disablePreview = [configDict[@"disablePreview"] boolValue];
@@ -50,11 +51,60 @@
     }];
 }
 
+
+- (void)intForKey:(CDVInvokedUrlCommand *)command {
+    NSString *key = [command argumentAtIndex:0];
+    int defaultValue = [[command argumentAtIndex:1] intValue];
+
+    int val = [VWO intForKey:key defaultValue:defaultValue];
+
+    CDVPluginResult* result = [CDVPluginResult
+                               resultWithStatus:CDVCommandStatus_OK
+                               messageAsDictionary:@{key : @(val)}];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)floatForKey:(CDVInvokedUrlCommand *)command {
+    NSString *key = [command argumentAtIndex:0];
+    double defaultValue = [[command argumentAtIndex:1] doubleValue];
+
+    double val = [VWO doubleForKey:key defaultValue:defaultValue];
+
+    CDVPluginResult* result = [CDVPluginResult
+                               resultWithStatus:CDVCommandStatus_OK
+                               messageAsDictionary:@{key : @(val)}];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)boolForKey:(CDVInvokedUrlCommand *)command {
+    NSString *key = [command argumentAtIndex:0];
+    BOOL defaultValue = [[command argumentAtIndex:1] boolValue];
+
+    BOOL val = [VWO boolForKey:key defaultValue:defaultValue];
+
+    CDVPluginResult* result = [CDVPluginResult
+                               resultWithStatus:CDVCommandStatus_OK
+                               messageAsDictionary:@{key : @(val)}];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)stringForKey:(CDVInvokedUrlCommand *)command {
+    NSString *key = [command argumentAtIndex:0];
+    NSString *defaultValue = [command argumentAtIndex:1];
+
+    NSString *val = [VWO stringForKey:key defaultValue:defaultValue];
+
+    CDVPluginResult* result = [CDVPluginResult
+                               resultWithStatus:CDVCommandStatus_OK
+                               messageAsDictionary:@{key : val}];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
 - (void)objectForKey:(CDVInvokedUrlCommand *)command {
     NSString *key = [command argumentAtIndex:0];
 
-    // default value is always nil as Java does not support General object type.
-    // Hence value is inserted in Dictionary and then sent
+        // default value is always nil as Java does not support General object type.
+        // Hence value is inserted in Dictionary and then sent
     id variation = [VWO objectForKey:key defaultValue:nil];
 
     CDVPluginResult* result;
