@@ -83,17 +83,108 @@ VWO.launch = function(apiKey, config, success, error){
   exec(success, error, PLUGIN_NAME, 'launch', [apiKey, validatedConfig(config)]);
 };
 
+/** Get the integer for a key
+ *
+ * @param success {callback} Success Callback
+ * @param key {string} Key for the campaign
+ * @param defaultValue {value} Default Value
+ * @return Variation object
+ */
+VWO.intForKey = function (key, defaultValue, success) {
+  if (!key) {
+    throw new Error('Unique key must be passed');
+  }
+  if (typeof defaultValue !== 'number') {
+    throw new Error('defaultValue must be a number');
+  }
+  exec( function(data) {
+    if (data[key] === null || data[key] === undefined) {
+      success(defaultValue);
+    } else {
+      success(data[key]);
+    }
+  }, function(error) {}, PLUGIN_NAME, 'intForKey', [key]);
+};
+
+/** Get the Float for a key
+ *
+ * @param success {callback} Success Callback
+ * @param key {string} Key for the campaign
+ * @param defaultValue {value} Default Value
+ * @return Variation object
+ */
+VWO.floatForKey = function (key, defaultValue, success) {
+  if (!key) {
+    throw new Error('Unique key must be passed');
+  }
+  if (typeof defaultValue !== 'number') {
+    throw new Error('defaultValue must be a number');
+  }
+  exec( function(data) {
+    if (data[key] === null || data[key] === undefined) {
+      success(defaultValue);
+    } else {
+      success(data[key]);
+    }
+  }, function(error) {}, PLUGIN_NAME, 'floatForKey', [key]);
+};
+
+/** Get the Boolean for a key
+ *
+ * @param success {callback} Success Callback
+ * @param key {string} Key for the campaign
+ * @param defaultValue {value} Default Value
+ * @return Variation object
+ */
+VWO.boolForKey = function (key, defaultValue, success) {
+  if (!key) {
+    throw new Error('Unique key must be passed');
+  }
+  if (typeof defaultValue !== 'boolean') {
+    throw new Error('defaultValue must be a number');
+  }
+  exec( function(data) {
+    if (data[key] === null || data[key] === undefined) {
+      success(defaultValue);
+    } else {
+      success(data[key]);
+    }
+  }, function(error) {}, PLUGIN_NAME, 'boolForKey', [key]);
+};
+
+/** Get the String for a key
+ *
+ * @param success {callback} Success Callback
+ * @param key {string} Key for the campaign
+ * @param defaultValue {value} Default Value
+ * @return Variation object
+ */
+VWO.stringForKey = function (key, defaultValue, success) {
+  if (!key) {
+    throw new Error('Unique key must be passed');
+  }
+  if (defaultValue === undefined) {
+    throw new Error('Must pass defaultValue');
+  }
+  exec( function(data) {
+    if (data[key] === null || data[key] === undefined) {
+      success(defaultValue);
+    } else {
+      success(data[key]);
+    }
+  }, function(error) {}, PLUGIN_NAME, 'stringForKey', [key]);
+};
+
 /** Get the Variation object for a key
  *
  * @param success {callback} Success Callback
- * @param error {callback} Failure Callback
  * @param key {string} Key for the campaign
  * @param defaultValue {value} Default Value
  * @return Variation object
  */
 VWO.objectForKey = function (key, defaultValue, success) {
   if (!key) {
-    throw new Error('Must pass Key for Campaign');
+    throw new Error('Unique key must be passed');
   }
   exec( function(data) {
     if (data[key] === null || data[key] === undefined) {
