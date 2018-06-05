@@ -133,7 +133,7 @@ VWO.boolForKey = function (key, defaultValue, success) {
     throw new Error('Unique key must be passed');
   }
   if (typeof defaultValue !== 'boolean') {
-    throw new Error('defaultValue must be a number');
+    throw new Error('defaultValue must be a boolean');
   }
   exec( function(data) {
     success(data[key]);

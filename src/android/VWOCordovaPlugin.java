@@ -60,6 +60,30 @@ public class VWOCordovaPlugin extends CordovaPlugin {
             getVariationForKey(key, callbackContext);
             return true;
 
+        } else if (action.equals("intForKey")) {
+            String key = args.getString(0);
+            int defaultValue = args.getInt(1);
+            getIntegerForKey(key, defaultValue, callbackContext);
+            return true;
+
+        } else if (action.equals("stringForKey")) {
+            String key = args.getString(0);
+            String defaultValue = args.getString(1);
+            getStringForKey(key, defaultValue, callbackContext);
+            return true;
+
+        } else if (action.equals("boolForKey")) {
+            String key = args.getString(0);
+            boolean defaultValue = args.getBoolean(1);
+            getBooleanForKey(key, defaultValue, callbackContext);
+            return true;
+
+        } else if (action.equals("floatForKey")) {
+            String key = args.getString(0);
+            double defaultValue = args.getDouble(1);
+            getDoubleForKey(key, defaultValue, callbackContext);
+            return true;
+
         } else if (action.equals("trackConversion")) {
             String goalIdentifier = args.getString(0);
             trackConversion(goalIdentifier, callbackContext);
@@ -182,6 +206,74 @@ public class VWOCordovaPlugin extends CordovaPlugin {
         return map;
     }
 
+    private void getIntegerForKey(final String key, final int defaultValue, final CallbackContext callbackContext) {
+        cordova.getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                JSONObject wrapperObject = new JSONObject();
+                int object = VWO.getIntegerForKey(key, defaultValue);
+                try {
+                    wrapperObject.put(key, object);
+                    callbackContext.success(wrapperObject);
+                } catch (JSONException exception) {
+                    VWOLog.e(VWOLog.DATA_LOGS, exception, false, false);
+                    callbackContext.error("Unable to create json: " + exception.getMessage());
+                }
+            }
+        });
+    }
+
+    private void getStringForKey(final String key, final String defaultValue, final CallbackContext callbackContext) {
+        cordova.getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                JSONObject wrapperObject = new JSONObject();
+                String object = VWO.getStringForKey(key, defaultValue);
+                try {
+                    if (object == null) {
+                        wrapperObject.put(key, JSONObject.NULL);
+                    } else {
+                        wrapperObject.put(key, object);
+                    }
+                    callbackContext.success(wrapperObject);
+                } catch (JSONException exception) {
+                    VWOLog.e(VWOLog.DATA_LOGS, exception, false, false);
+                    callbackContext.error("Unable to create json: " + exception.getMessage());
+                }
+            }
+        });
+    }
+
+    private void getBooleanForKey(final String key, final boolean defaultValue, final CallbackContext callbackContext) {
+        cordova.getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                JSONObject wrapperObject = new JSONObject();
+                boolean object = VWO.getBooleanForKey(key, defaultValue);
+                try {
+                    wrapperObject.put(key, object);
+                    callbackContext.success(wrapperObject);
+                } catch (JSONException exception) {
+                    VWOLog.e(VWOLog.DATA_LOGS, exception, false, false);
+                    callbackContext.error("Unable to create json: " + exception.getMessage());
+                }
+            }
+        });
+    }
+
+    private void getDoubleForKey(final String key, final double defaultValue, final CallbackContext callbackContext) {
+        cordova.getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                JSONObject wrapperObject = new JSONObject();
+                double object = VWO.getDoubleForKey(key, defaultValue);
+                try {
+                    wrapperObject.put(key, object);
+                    callbackContext.success(wrapperObject);
+                } catch (JSONException exception) {
+                    VWOLog.e(VWOLog.DATA_LOGS, exception, false, false);
+                    callbackContext.error("Unable to create json: " + exception.getMessage());
+                }
+            }
+        });
+    }
+
     private void getVariationForKey(final String key, final CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
@@ -194,6 +286,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
                         callbackContext.success(wrapperObject);
                     } catch (JSONException exception) {
                         VWOLog.e(VWOLog.DATA_LOGS, exception, false, false);
+                        callbackContext.error("Unable to create json: " + exception.getMessage());
                     }
                 } else {
                     try {
@@ -201,6 +294,7 @@ public class VWOCordovaPlugin extends CordovaPlugin {
                         callbackContext.success(wrapperObject);
                     } catch (JSONException exception) {
                         VWOLog.e(VWOLog.DATA_LOGS, exception, false, false);
+                        callbackContext.error("Unable to create json: " + exception.getMessage());
                     }
                 }
             }
