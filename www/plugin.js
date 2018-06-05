@@ -98,12 +98,8 @@ VWO.intForKey = function (key, defaultValue, success) {
     throw new Error('defaultValue must be a number');
   }
   exec( function(data) {
-    if (data[key] === null || data[key] === undefined) {
-      success(defaultValue);
-    } else {
-      success(data[key]);
-    }
-  }, function(error) {}, PLUGIN_NAME, 'intForKey', [key]);
+    success(data[key]);
+  }, function(error) {}, PLUGIN_NAME, 'intForKey', [key, defaultValue]);
 };
 
 /** Get the Float for a key
@@ -121,12 +117,8 @@ VWO.floatForKey = function (key, defaultValue, success) {
     throw new Error('defaultValue must be a number');
   }
   exec( function(data) {
-    if (data[key] === null || data[key] === undefined) {
-      success(defaultValue);
-    } else {
-      success(data[key]);
-    }
-  }, function(error) {}, PLUGIN_NAME, 'floatForKey', [key]);
+    success(data[key]);
+  }, function(error) {}, PLUGIN_NAME, 'floatForKey', [key, defaultValue]);
 };
 
 /** Get the Boolean for a key
@@ -144,12 +136,8 @@ VWO.boolForKey = function (key, defaultValue, success) {
     throw new Error('defaultValue must be a number');
   }
   exec( function(data) {
-    if (data[key] === null || data[key] === undefined) {
-      success(defaultValue);
-    } else {
-      success(data[key]);
-    }
-  }, function(error) {}, PLUGIN_NAME, 'boolForKey', [key]);
+    success(data[key]);
+  }, function(error) {}, PLUGIN_NAME, 'boolForKey', [key, defaultValue]);
 };
 
 /** Get the String for a key
@@ -167,12 +155,8 @@ VWO.stringForKey = function (key, defaultValue, success) {
     throw new Error('Must pass defaultValue');
   }
   exec( function(data) {
-    if (data[key] === null || data[key] === undefined) {
-      success(defaultValue);
-    } else {
-      success(data[key]);
-    }
-  }, function(error) {}, PLUGIN_NAME, 'stringForKey', [key]);
+    success(data[key]);
+  }, function(error) {}, PLUGIN_NAME, 'stringForKey', [key, defaultValue]);
 };
 
 /** Get the Variation object for a key
@@ -186,13 +170,14 @@ VWO.objectForKey = function (key, defaultValue, success) {
   if (!key) {
     throw new Error('Unique key must be passed');
   }
+  //DefaultValue is resolved here. Native SDK would always pass nil as default value.
   exec( function(data) {
     if (data[key] === null || data[key] === undefined) {
       success(defaultValue);
     } else {
       success(data[key]);
     }
-  }, function(error) {}, PLUGIN_NAME, 'objectForKey', [key]);
+  }, function(error) {}, PLUGIN_NAME, 'objectForKey', [key]);//Default value is not passed here.
 };
 
 
