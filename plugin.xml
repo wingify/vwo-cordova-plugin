@@ -33,7 +33,7 @@
     <platform name="ios">
         <pods-config ios-min-version="9.0" use-frameworks="true">
         </pods-config>
-        <pod name="VWO"/>
+        <pod name="VWO" version=">= 2.4.1"/>
         <js-module src="www/plugin.js" name="plugin">
             <runs/>
             <clobbers target="VWOCordovaPlugin" />
