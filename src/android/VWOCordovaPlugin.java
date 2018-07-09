@@ -51,6 +51,12 @@ public class VWOCordovaPlugin extends CordovaPlugin {
             launch(apiKey, vwoConfig, callbackContext);
             return true;
 
+        } else if (action.equals("setCustomVariable")) {
+             String key = args.getString(0);
+             String value = args.getString(1);
+             setCustomVariable(key, value, callbackContext);
+             return true;
+ 
         } else if (action.equals("version")) {
             getVersion(callbackContext);
             return true;
@@ -273,6 +279,14 @@ public class VWOCordovaPlugin extends CordovaPlugin {
             }
         });
     }
+
+    private void setCustomVariable(final String key, final String value, final CallbackContext callbackContext) {
+         cordova.getActivity().runOnUiThread(new Runnable() {
+             public void run() {
+                 VWO.setCustomVariable(key, value);
+             }
+         });
+     }
 
     private void getVariationForKey(final String key, final CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {

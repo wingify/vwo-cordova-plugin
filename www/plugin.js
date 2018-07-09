@@ -218,6 +218,20 @@ VWO.trackConversionWithValue = function (goal, value) {
   exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'trackConversionWithValue', [goal, value]);
 };
 
+/** Set custom variable by passing key and value
+ *
+ * @param success {callback} Success Callback
+ * @param error {callback} Failure Callback
+ * @param key {string} Key
+ * @param value {string} Value
+ */
+VWO.setCustomVariable = function(key, value){
+  if(!key || !value) {
+    throw new Error('Key or Value is null');
+  }
+  exec(function(data) {}, function(error) {}, PLUGIN_NAME, 'setCustomVariable', [key, value]);
+};
+
 /** Get the version of the SDK
  *
  * @param success {callback} Success Callback
