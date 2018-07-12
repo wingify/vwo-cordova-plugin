@@ -5,6 +5,8 @@
 
 - (void)setLogLevel:(CDVInvokedUrlCommand *)command;
 
+- (void)setCustomVariable:(CDVInvokedUrlCommand *)command;
+
 - (void)launchSynchronously:(CDVInvokedUrlCommand *)command;
 
 - (void)launch:(CDVInvokedUrlCommand *)command;

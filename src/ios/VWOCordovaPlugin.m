@@ -18,6 +18,13 @@
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
+- (void)setCustomVariable:(CDVInvokedUrlCommand *)command {
+    NSString *key = [command argumentAtIndex:0];
+    NSString *value = [command argumentAtIndex:1];
+    [VWO setCustomVariable:key withValue:value];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+}
+
 //Private
 - (VWOConfig *)vwoConfigFromDictionary:(NSDictionary *)configDict {
     VWOConfig *config = [VWOConfig new];
